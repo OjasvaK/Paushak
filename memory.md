@@ -33,7 +33,7 @@ AI-powered, zero-budget marketplace connecting India's marginalized textile arti
 
 | # | Stage | Status | Needs from human |
 |---|---|---|---|
-| 1 | Project skeleton & tooling | ⬜ Not started | — |
+| 1 | Project skeleton & tooling | ✅ Done (2026-11-07) | — |
 | 2 | Supabase setup & DB schema + RLS | ⬜ Not started | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` |
 | 3 | Auth & three roles | ⬜ Not started | (Supabase keys) |
 | 4 | Listings (manual) & marketplace browse | ⬜ Not started | (Supabase keys) |
@@ -52,11 +52,14 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done · ⛔ blocked
 - 2026-11-07 — Read all three planning docs; project understood. Created this `memory.md`.
 - 2026-11-07 — Git initialized (branch `main`), remote `origin` = https://github.com/OjasvaK/Paushak.git, base `.gitignore` added, initial commit of planning docs. **Not pushed yet** (push only on user's say-so).
 - Environment: Git 2.51, Node 25.2, npm 11.6, gh 2.101 installed.
+- 2026-11-07 — Project moved out of OneDrive to `C:\projects\Paushak`. Old copy of the `.md` files still in `OneDrive\Desktop\projects\Paushak` — safe for the user to delete.
+- 2026-11-07 — **Stage 1 done.** Next.js 16.4.5 (App Router, Turbopack, `cacheComponents` on) + React 19.3 + TypeScript 5.9 + Tailwind 4.3 + ESLint 9 + Prettier 3.9 (with eslint-config-prettier). All versions pinned exactly. Folders: `src/{app,components,lib,types,i18n,styles}`. i18n: `src/i18n/{en,hi}.json` + `getDictionary()` / `hasLocale()` in `src/i18n/index.ts`. `.env.example` lists every future env var. Landing page at `/` (bilingual, Noto Sans for Latin + Devanagari). `.gitattributes` forces LF. Verified: `lint`, `format:check`, `build` pass; dev server renders at 360px with no console errors.
 
 ## 6. Next step
 
-1. **User:** move project out of OneDrive to e.g. `C:\Projects\Paushak` (the `.git` folder moves with it) and open a new session there.
-2. **Claude:** Stage 1 — Project skeleton (Next.js + TS + Tailwind + ESLint/Prettier, `src/` folders, i18n `en`/`hi`, `.env.example`, landing page). Scaffolding goes in the repo root alongside the existing `.md` files.
+**Stage 2 — Supabase setup & DB schema + RLS.**
+- **User needs to:** create a free project at supabase.com → Project Settings → API → copy `Project URL`, `anon` key, `service_role` key into `.env.local` (copy from `.env.example`). Stage 2 can start without them (migration files get written first), but the schema can't be applied until they exist.
+- **Claude will:** install `@supabase/supabase-js` + `@supabase/ssr`, write `src/lib/supabase/{client,server,admin}.ts`, the SQL migration (all tables, enums, pgvector, RLS, profile trigger), and `src/types/database.ts`.
 
 ## 7. Open questions / things to watch
 
@@ -64,6 +67,10 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done · ⛔ blocked
 - Gemini embedding dimension must be confirmed in Stage 7; schema assumes `vector(768)` — write a follow-up migration if it differs.
 - Impact numbers in the pitch (6.4–6.9M vs 3.2–3.7M artisans) need reconciling + primary citations.
 - Avoid naming real brands (e.g. "Snitch") as partners in pitches.
+- **Locale routing not decided yet:** `/hi/...` + `/en/...` URL prefixes vs. a cookie/profile preference. Stage 1 just has dictionaries; decide before Stage 3/4 UI work. (Next 16 docs recommend `app/[lang]/` + `proxy.ts`.)
+- Next.js 16 renamed `middleware.ts` → **`proxy.ts`**. Stage 3 of `steps.md` says `src/middleware.ts` — check the bundled docs (`node_modules/next/dist/docs/`) and use the current convention.
+- `npm audit`: 8 moderate warnings, all in dev-only lint tooling (typescript-eslint). Not shipped to users; don't `--force` fix. Recheck when upgrading.
+- Node 25 is a non-LTS release; fine so far. If a tool misbehaves, try Node 24 LTS.
 
 ## 8. Decisions log
 

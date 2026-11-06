@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+build
+package-lock.json
+next-env.d.ts
+
+# Planning docs are hand-written; don't reformat them.
+paushaak-idea.md
+steps.md
+technical-approach.md
+memory.md
+AGENTS.md
